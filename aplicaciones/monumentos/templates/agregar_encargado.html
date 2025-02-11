@@ -1,0 +1,32 @@
+{% extends "plantilla.html" %}
+{%block contenido%}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="form-container shadow p-4">
+            <form enctype="multipart/form-data" action="agregar_encargado" id="frm_nuevo_estudiante" method="post">
+                <h3 class="text-center">Agregar Nuevo Encargado:</h3>
+                {% csrf_token %}
+                <label for=""><b>NOMBRE:</b></label>
+                <input type="text" class="form-control" name="txt_nombre" id="txt_nombre">
+                <br>
+                <label for=""><b>CARGO:</b></label>
+                <input type="text" class="form-control" name="txt_cargo" id="txt_cargo">
+                <br>
+                <label for=""><b>TELEFONO:</b></label>
+                <input type="text" class="form-control" name="txt_telefono" id="txt_telefono">
+                <br>
+                <label for=""><b>CORREO:</b></label>
+                <input type="email" class="form-control" name="txt_correo" 
+                       id="txt_correo">
+                <br>
+                <center>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <a href="/" class="btn btn-danger">Cancelar</a>
+                </center>
+            </form>
+        </div>
+
+    </div>
+</div>
+{%endblock%}

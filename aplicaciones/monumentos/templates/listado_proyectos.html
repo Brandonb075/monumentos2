@@ -1,0 +1,93 @@
+{% extends 'plantilla.html' %}
+{% block contenido %}
+<div class="container mt-4">
+    <h3 class="text-primary">Lista de Proyectos</h3>
+    <table class="table table-bordered table-striped table-hover" id="tbl_proyectos">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Fecha de Inicio</th>
+                <th>Fecha de Fin Estimada</th>
+                <th>Monumento</th>
+                <th>Encargado</th>
+                <th>Materiales</th>
+                <th>Acciones</th>
+                <th> Foto </th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iteración de proyectos desde el backend -->
+            {% for proyecto in proyectos %}
+            <tr>
+                <td>{{ proyecto.nombre }}</td>
+                <td>{{ proyecto.descripcion|default:"Sin descripción" }}</td>
+                <td>{{ proyecto.fecha_inicio }}</td>
+                <td>{{ proyecto.fecha_fin_estimada }}</td>
+                <td>{{ proyecto.monumento.nombre }}</td>
+                <td>{{ proyecto.encargado.nombre }}</td>  <!-- Aquí estaba el problema -->
+                <td>
+                    {% for material in proyecto.materiales.all %}
+                        <span class="badge bg-secondary">{{ material.nombre }}</span>
+                    {% empty %}
+                        <span class="badge bg-warning">No hay materiales</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{% url 'editar_proyectos' proyecto.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'eliminar_proyectos' proyecto.id %}" 
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('¿Está seguro de eliminar este proyecto?');">Eliminar</a>
+                </td>
+                <td>
+                    {% if proyecto.foto and proyecto.foto.url %}
+                    <a href="{{ proyecto.foto.url }}" target="_blank">
+                        <img src="{{ proyecto.foto.url }}" alt="Foto" height="100" width="100">
+                    </a><br>
+                    <a download href="{{ proyecto.foto.url }}">Descargar</a>
+                    {% else %}
+                    <p>No hay foto disponible.</p>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center">No hay proyectos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="{% url 'agregar_proyectos' %}" class="btn btn-success">Agregar Proyecto</a>
+<script>
+    // Inicializar DataTable
+    $(document).ready(function () {
+        $('#tbl_proyectos').DataTable({
+            responsive: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copiar',
+                    className: 'btn btn-secondary'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'Exportar a CSV',
+                    className: 'btn btn-info'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}

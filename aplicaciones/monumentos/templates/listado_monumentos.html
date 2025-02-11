@@ -1,0 +1,81 @@
+{% extends 'plantilla.html' %}
+{% block contenido %}
+<div class="container mt-4">
+    <h3 class="text-primary">Lista de Monumentos</h3>
+    <table class="table table-bordered table-striped table-hover" id="tbl_monumentos">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Ubicación</th>
+                <th>Descripción</th>
+                <th>Fecha de Construcción</th>
+                <th>Acciones</th>
+                <th>Foto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iteración de monumentos desde el backend -->
+            {% for monumentos in monumentos %}
+            <tr>
+                <td>{{ monumentos.nombre }}</td>
+                <td>{{ monumentos.ubicacion }}</td>
+                <td>{{ monumentos.descripcion|default:"Sin descripción" }}</td>
+                <td>{{ monumentos.fecha_construccion }}</td>
+                <td>
+                    <a href="{% url 'editar_monumentos' monumentos.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'eliminar_monumentos' monumentos.id %}" 
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('¿Está seguro de eliminar este monumento?');">Eliminar</a>
+                </td>
+                <td>
+                    {% if monumentos.foto and monumentos.foto.url %}
+                    <a href="{{ monumentos.foto.url }}" target="_blank">
+                        <img src="{{ monumentos.foto.url }}" alt="Foto" height="100" width="100">
+                    </a><br>
+                    <a download href="{{ monumentos.foto.url }}">Descargar</a>
+                    {% else %}
+                    <p>No hay foto disponible.</p>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No hay monumentos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="{% url 'agregar_monumentos' %}" class="btn btn-success">Agregar Monumento</a>
+<script>
+    // Inicializar DataTable
+    $(document).ready(function () {
+        $('#tbl_monumentos').DataTable({
+            responsive: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copiar',
+                    className: 'btn btn-secondary'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'Exportar a CSV',
+                    className: 'btn btn-info'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "plantilla.html" %}
+{% block contenido %}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="form-container shadow p-4">
+            <form enctype="multipart/form-data" action="agregar_monumentos" id="frm_nuevo_monumento" method="post">
+                <h3 class="text-center">Agregar Nuevo Monumento:</h3>
+                {% csrf_token %}
+                
+                <!-- Campo Nombre -->
+                <label for="txt_nombre"><b>Nombre:</b></label>
+                <input type="text" class="form-control" name="txt_nombre" id="txt_nombre" required>
+                <br>
+                
+                <!-- Campo Ubicación -->
+                <label for="txt_ubicacion"><b>Ubicación:</b></label>
+                <input type="text" class="form-control" name="txt_ubicacion" id="txt_ubicacion" required>
+                <br>
+                
+                <!-- Campo Descripción -->
+                <label for="txt_descripcion"><b>Descripción:</b></label>
+                <textarea class="form-control" name="txt_descripcion" id="txt_descripcion" rows="3"></textarea>
+                <br>
+                
+                <!-- Campo Fecha de Construcción -->
+                <label for="txt_fecha_construccion"><b>Fecha de Construcción:</b></label>
+                <input type="date" class="form-control" name="txt_fecha_construccion" id="txt_fecha_construccion" required>
+                <br>
+
+                <!-- Campo Foto (con arrastrar y soltar habilitado) -->
+                <label for="txt_foto"><b>Foto:</b></label>
+                <input id="txt_foto" name="txt_foto" type="file" accept="image/*" class="file" data-preview-file-type="text" required />
+                <br>
+
+                <center>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <a href="/" class="btn btn-danger">Cancelar</a>
+                </center>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Inicializar el campo de archivo para soportar drag & drop
+        $("#txt_foto").fileinput({
+            theme: 'fa',  // Usar el tema con íconos Font Awesome
+            allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],  // Extensiones permitidas
+            maxFileSize: 5000,  // Tamaño máximo del archivo en KB
+            showUpload: false,  // Ocultar el botón de carga
+            showRemove: false,  // Ocultar el botón de eliminación
+            showCaption: false,  // Ocultar el nombre del archivo
+            browseClass: "btn btn-primary",  // Estilo del botón de búsqueda
+            fileActionSettings: {showZoom: false},  // Ocultar zoom en la vista previa
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "plantilla.html" %}
+{% block contenido %}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="form-container shadow p-4">
+            <form enctype="multipart/form-data" action="agregar_materiales" id="frm_nuevo_material" method="post">
+                <h3 class="text-center">Agregar Nuevo Material:</h3>
+                {% csrf_token %}
+                
+                <label for="txt_nombre"><b>Nombre:</b></label>
+                <input type="text" class="form-control" name="txt_nombre" id="txt_nombre" required>
+                <br>
+                
+                <label for="txt_descripcion"><b>Descripción:</b></label>
+                <textarea class="form-control" name="txt_descripcion" id="txt_descripcion" rows="3"></textarea>
+                <br>
+                
+                <label for="txt_cantidad"><b>Cantidad Disponible:</b></label>
+                <input type="number" class="form-control" name="txt_cantidad" id="txt_cantidad" min="0" required>
+                <br>
+
+                <center>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <a href="/" class="btn btn-danger">Cancelar</a>
+                </center>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

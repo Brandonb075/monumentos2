@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Sistema de gestion de monumentos</title>
+        <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <!-- Importando jQuery primero -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+        
+        <!-- DataTables y extensiones -->
+        <script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+        <!-- FileInput CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" /> 
+        <!-- FileInput JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-fileinput/js/fileinput.min.js"></script>
+        <!-- Toastr CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    </head>
+    <body>
+        <header>
+            <h1 class="site-heading text-center text-faded d-none d-lg-block">
+                <span class="site-heading-upper text-primary mb-3">Sistema de gestion de monumentos</span>
+                <span class="site-heading-lower" style="color: black;">Monumentos</span>
+            </h1>
+        </header>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Start Bootstrap</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a href="/" class="nav-link active">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'listado_encargado' %}">Encargado</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'listado_monumentos' %}">Monumentos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'listado_materiales' %}">Materiales</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'listado_proyectos' %}">Proyectos</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% block contenido %}
+        {% endblock %}
+        <footer class="bg-primary text-white text-center py-3">
+            <p class="mb-0">&copy; 2024 App Monumentos | Desarrollado por Brandon Barba</p>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static 'js/scripts.js' %}"></script>
+        <style>
+            body {
+                background-image: url("{% static 'assets/img/fondo.jpg' %}");
+                background-size: cover;
+                background-position: center center;
+                background-attachment: fixed;
+            }
+            label.error {
+                color: white;
+                font-weight: bold;
+                background-color: red;
+                border-radius: 10px;
+                padding: 5px;
+                margin-top: 5px;
+            }
+            input.error {
+                border: 1px solid red;
+            }
+        </style>
+        <!-- Toastr JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        {% if messages %}
+            {% for mensajeConfirmacion in messages %}
+                <script>
+                    // Notificación usando toastr
+                    {% if mensajeConfirmacion.tags == "success" %}
+                        toastr.success("{{ mensajeConfirmacion|escapejs }}");
+                    {% elif mensajeConfirmacion.tags == "error" %}
+                        toastr.error("{{ mensajeConfirmacion|escapejs }}");
+                    {% elif mensajeConfirmacion.tags == "warning" %}
+                        toastr.warning("{{ mensajeConfirmacion|escapejs }}");
+                    {% elif mensajeConfirmacion.tags == "info" %}
+                        toastr.info("{{ mensajeConfirmacion|escapejs }}");
+                    {% endif %}
+                </script>
+            {% endfor %}
+        {% endif %}
+
+        <script>
+            $(document).ready(function () {
+                // Inicializar DataTable en las tablas con la clase 'datatable'
+                $('.datatable').DataTable({
+                    dom: 'Bfrtip',
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                });
+            });
+        </script>
+    
+        {% if messages %}
+            {% for mensajeConfirmacion in messages %}
+                <script>
+                    if ("{{ mensajeConfirmacion.tags }}" == "success") {
+                        iziToast.success({
+                            title: 'OK',
+                            message: '{{ mensajeConfirmacion|escapejs }}',
+                            position: 'topRight'
+                        });
+                    }
+                </script>
+            {% endfor %}
+        {% endif %}
+    </body>
+</html>

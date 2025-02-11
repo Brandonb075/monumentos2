@@ -1,0 +1,72 @@
+{% extends 'plantilla.html' %}
+{% block contenido %}
+<div class="container mt-4">
+    <h3 class="text-primary">Lista de Encargado</h3>
+    <table class="table table-bordered table-striped table-hover" id="tbl_encargado">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Cargo</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iteración de encargados desde el backend -->
+            {% for encargado in encargado %}
+            <tr>
+                <td>{{ encargado.nombre }}</td>
+                <td>{{ encargado.cargo }}</td>
+                <td>{{ encargado.telefono }}</td>
+                <td>{{ encargado.correo }}</td>
+                <td>
+                    <a href="{% url 'editar_encargado' encargado.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'eliminar_encargado' encargado.id %}" 
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('¿Está seguro de eliminar este estudiante?');">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No hay encargados registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="{% url 'agregar_encargado' %}" class="btn btn-success">Agregar Encargado</a>
+
+<script>
+    // Inicializar DataTable
+    $(document).ready(function () {
+        $('#tbl_encargado').DataTable({
+            responsive: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copiar',
+                    className: 'btn btn-secondary'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'Exportar a CSV',
+                    className: 'btn btn-info'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                }
+            ]
+        });
+    });
+</script>
+{% endblock%}
+

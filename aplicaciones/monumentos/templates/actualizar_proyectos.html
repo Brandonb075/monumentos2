@@ -1,0 +1,69 @@
+{% extends 'plantilla.html' %}
+{% block contenido %}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="form-container shadow p-4">
+            <form action="{% url 'editar_proyectos' proyecto.id %}" id="frm_editar_proyecto" method="post">
+                <h3 class="text-center">Editar Proyecto:</h3>
+                {% csrf_token %}
+                
+                <!-- Campo Nombre -->
+                <label for=""><b>Nombre:</b></label>
+                <input type="text" class="form-control" name="txt_nombre" id="txt_nombre" value="{{ proyecto.nombre }}">
+                <br>
+                
+                <!-- Campo Descripción -->
+                <label for=""><b>Descripción:</b></label>
+                <textarea class="form-control" name="txt_descripcion" id="txt_descripcion">{{ proyecto.descripcion }}</textarea>
+                <br>
+                
+                <!-- Campo Fecha de Inicio -->
+                <label for=""><b>Fecha de Inicio:</b></label>
+                <input type="date" class="form-control" name="txt_fecha_inicio" id="txt_fecha_inicio" value="{{ proyecto.fecha_inicio|date:'Y-m-d' }}">
+                <br>
+                
+                <!-- Campo Fecha de Fin Estimada -->
+                <label for=""><b>Fecha de Fin Estimada:</b></label>
+                <input type="date" class="form-control" name="txt_fecha_fin_estimada" id="txt_fecha_fin_estimada" value="{{ proyecto.fecha_fin_estimada|date:'Y-m-d' }}">
+                <br>
+                
+                <!-- Campo Monumento -->
+                <label for=""><b>Monumento:</b></label>
+                <select class="form-control" name="txt_monumento" id="txt_monumento">
+                    <option value="">Seleccionar</option>
+                    {% for monumentos in monumentos %}
+                        <option value="{{ monumentos.id }}" {% if proyecto.monumentos.id == monumentos.id %} selected {% endif %}>
+                            {{ monumentos.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <br>
+
+                <!-- Campo Encargado -->
+                <label for=""><b>Encargado:</b></label>
+                <select class="form-control" name="txt_encargado" id="txt_encargado">
+                    {% for encargado in encargados %}
+                        <option value="{{ encargado.id }}" {% if proyecto.encargado.id == encargado.id %} selected {% endif %}>{{ encargado.nombre }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                
+                <!-- Campo Materiales -->
+                <label for=""><b>Materiales:</b></label>
+                <select multiple class="form-control" name="txt_materiales" id="txt_materiales">
+                    {% for material in materiales %}
+                        <option value="{{ material.id }}" {% if material in proyecto.materiales.all %} selected {% endif %}>{{ material.nombre }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                
+                <center>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <a href="{% url 'listado_proyectos' %}" class="btn btn-danger">Cancelar</a>
+                </center>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'plantilla.html' %}
+{% block contenido %}
+<div class="container mt-4">
+    <h3 class="text-primary">Lista de Materiales</h3>
+    <table class="table table-bordered table-striped table-hover" id="tbl_materiales">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Cantidad Disponible</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iteración de materiales desde el backend -->
+            {% for materiales in materiales %}
+            <tr>
+                <td>{{ materiales.nombre }}</td>
+                <td>{{ materiales.descripcion|default:"Sin descripción" }}</td>
+                <td>{{ materiales.cantidad_disponible }}</td>
+                <td>
+                    <a href="{% url 'editar_materiales' materiales.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'eliminar_materiales' materiales.id %}" 
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('¿Está seguro de eliminar este material?');">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No hay materiales registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="{% url 'agregar_materiales' %}" class="btn btn-success">Agregar Material</a>
+<script>
+    // Inicializar DataTable
+    $(document).ready(function () {
+        $('#tbl_materiales').DataTable({
+            responsive: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copiar',
+                    className: 'btn btn-secondary'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'Exportar a CSV',
+                    className: 'btn btn-info'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}

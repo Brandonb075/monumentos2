@@ -1,0 +1,32 @@
+{%extends 'plantilla.html'%}
+{%block contenido%}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="form-container shadow p-4">
+            <form action="{% url 'editar_encargado' encargado.id %}" id="frm_editar_estudiante" method="post">
+                <h3 class="text-center">Editar Encargado:</h3>
+                {% csrf_token %}
+                
+                <!-- Campo ID visible, solo lectura -->
+                <label for=""><b>Nombre:</b></label>
+                <input type="text" class="form-control" name="txt_nombre" id="txt_nombre" value="{{ encargado.nombre }}" readonly>
+                <br>
+                <label for=""><b>Cargo:</b></label>
+                <input type="text" class="form-control" name="txt_cargo" id="txt_cargo" value="{{ encargado.cargo }}" readonly>
+                <br>
+                <label for=""><b>Telefono:</b></label>
+                <input type="number" class="form-control" name="txt_telefono" id="txt_telefono" value="{{ encargado.telefono }}">
+                <br>
+                <label for=""><b>Correo:</b></label>
+                <input type="email" class="form-control" name="txt_correo" id="txt_correo" value="{{ encargado.correo}}">
+                <br>
+                <center>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <a href="{% url 'listado_encargado' %}" class="btn btn-danger">Cancelar</a>
+                </center>
+            </form>
+        </div>
+    </div>
+</div>
+{%endblock%}
